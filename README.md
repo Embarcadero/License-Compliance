@@ -14,3 +14,5 @@ Open source libraries that have been modified and/or used in projects distribute
     * Source: https://github.com/ios-control/ios-deploy
 * [GNU Patch](https://github.com/Embarcadero/License-Compliance/tree/main/GNU-Patch/)
   * GPLv3
+
+<sub>*These libraries are not supported by Embarcadero.*</sub>
