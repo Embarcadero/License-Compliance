@@ -1,0 +1,4 @@
+2014-10-13  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* i386-dis.c (append_seg, OP_ST, OP_ESreg): Fix clang errors when
+	compiling under clang; use scratch buffer for char* opperations.

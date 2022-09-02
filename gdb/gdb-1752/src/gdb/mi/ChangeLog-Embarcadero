@@ -1,0 +1,79 @@
+2014-03-24  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-cmd-disas.c (mi_cmd_disassemble): Fix disassembler returned 
+	empty instructions list if no sym info found for given start address 
+	- even minsyms not available - in this case disassemble reasonable 
+	amount of bytes enough for looking around.
+
+2014-01-14  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* mi-interp.c (mi_interpreter_init): Replace openning of log file
+	with call to logging_enabled().
+	* mi-cmds.h: Remove file logging declarations (now in defs.h).
+	* mi-main.c: Ditto.
+	* mi-out.c: Ditto.
+
+2013-10-04  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-cmd-stack.c (print_syms_for_block): common_val_print usage to
+	avoid printing argument types in frame info output.
+
+2013-04-09  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-cmds.c: -debughook-control MI command name changed to
+	-enable-debughook, default=disabled. Valid values: yes/no.
+
+2013-04-08  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-main.c, mi-cmds.c, mi-cmds.h: -debughook-control MI command,
+	default=disabled.  Valid values: yes/no.  Used once per debug session,
+	before -exec-run. Controls DbgExcNotify hook.
+
+2013-04-08  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-common.c, mi-common.h: New EXEC_ASYNC_EXCEPTION_RAISED reason
+	code if DbgExcNotify() triggered.
+
+2013-03-27  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-main.c, mi-cmds.c: New -data-info-line MI command - MI analogue of
+	CLI "info line".
+
+2012-06-26  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-cmds.c: Fix for -target-info-async, No parameters required error
+	response.
+
+2012-06-25  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-main.c, mi-cmds.c, mi-cmds.h: -target-info-async command.  Used
+	for detection if target can be debugged in async mode and reporting
+	currently used mode.  
+
+2012-06-21  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-main.c: Additional fflush'ing of stdout for ^error responses. 
+	Fixed GDB hang related to fflush file_log if no file_log.
+
+2012-06-19  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-main.c: Additional fflush'ing of stdout for ^error responces.
+
+2012-06-19  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-interp.c, mi-main.c, mi-out.c, mi-parse.c: File logger disabled
+	by default.  May be enabled with setting environment variable
+	MIGDB_DEBUG=1.  Log files name pattern changed to migdb_<GDB pid>.log
+
+2012-06-18  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-cmds.h, mi-interp.c, mi-main.c, mi-out.c, mi-parse.c: File logger
+	facility.  GDB can't redirect already redirected output in case of MI,
+	so completely independent file logger added. Log files created in run
+	directory, file called migdb<GDB pid>.log
+	
+2012-06-18  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-main.c: Extra prompt for stable detection result of async -exec-* 
+	commands execution on remote target.
+

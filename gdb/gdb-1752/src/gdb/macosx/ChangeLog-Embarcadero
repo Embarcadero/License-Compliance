@@ -1,0 +1,38 @@
+2016-12-15  Dawn Perchik <dperchik@embarcadero.com>
+
+	* macosx-nat-dyld.c (dyld_read_raw_infos): If the dyld_raw_infos structure 
+	is version 15 (the version used in iOS 10), set the intended load address 
+	to INVALID_ADDRESS so that the actual address will be used as the slide amount.
+
+2016-12-15  Dawn Perchik <dperchik@embarcadero.com>
+
+	* macosx-nat-dyld.c, macosx-nat-dyld-process.c: Output additoinal debug
+	information if DEBUG_MACOSX is defined.
+
+2016-10-14  Dawn Perchik <dperchik@embarcadero.com>
+
+	* macosx-nat-dyld.c (dyld_read_raw_infos): Fix finding the dyld start address
+	in the dyld_raw_infos structure for version 15 to work with iOS 10.
+
+2015-12-24  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	GDB must exit on any error critical for initial app launch phase (autotests).
+	* remote-mobile.c (remote_mobile_open): Change error message print to internal
+	error on getting mobile device fd.
+
+2014-02-05  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* macosx-nat-dyld.c (dyld_read_raw_infos): Error notification in case
+	GDB was unable to resolve dyld load address correctly upon information
+	reported by device. This notification may be used for making decision
+	to restart debug session - further debugging may be unreliable.
+
+2013-08-22  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* arm-macosx-tdep.c: Force software stepping - needed for stepping
+	through atomic code sequences.
+
+2013-02-14  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* macosx-nat-dyld.c: "(gdb) LF" prompt added after =shlib-added notify
+	output. 

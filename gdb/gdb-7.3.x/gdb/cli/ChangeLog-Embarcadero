@@ -1,0 +1,4 @@
+2013-09-27  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* cli-setshow.c (do_setshow_command): Patch for current language
+	not printed in MI mode (-gdb-show) if language mode is auto.

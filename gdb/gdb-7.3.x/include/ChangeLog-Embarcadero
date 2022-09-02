@@ -1,0 +1,11 @@
+2015-06-15  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* dwarf2.h: Add support for BORLAND DWARF extensions.
+
+2014-04-04  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* filenames.h: Always recognize DOS style paths and filenames.
+
+2013-06-28  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* demangle.h: Delphi demangling related definitions.

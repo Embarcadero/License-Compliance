@@ -1,0 +1,40 @@
+2014-01-15  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* cp-demangle.c: Fix GDB crash regression in case CTOR/DTOR CPP
+	type name demangling (_GLOBAL__I_a). Fixes GDB crash on Android CPP app
+	debug session start.
+
+2013-08-29  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* cp-demangle.c (d_demangle_callback): Minor cleanup.
+
+2013-08-23  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 22275 from ios/gdbcrossarm/gdb-1752:
+	* cp-demangle.c (d_demangle_callback): Don't always pass the
+	DMGL_DELPHI option, as it could break C++ demangling.
+
+2013-07-29  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Cleanup: fix indentation and coding style. 
+
+2013-07-22  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* cp-demangle.c: Fix GDB crash/malfunctioning in case CTOR/DTOR CPP
+	type name demangling (_GLOBAL__I_a).  Fixes symbol read problem in
+	case app built with CPP libs.
+
+2013-07-03  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* cp-demangle.c: Fix Delphi scope separator demangling in case of
+	stack frame print. Fix for types demangling as well.
+
+2013-07-02  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* cp-demangle.c: Fix Delphi types demangling, in case type mangled
+	name started with N* and DMGL_TYPES explicitly requested.
+
+2013-06-28  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* cplus-dem.c, cp-demangle.c: Delphi demangling manner.  DMGL_DELPHI
+	demangling added. Additions for demangling delphi/pascal function names.

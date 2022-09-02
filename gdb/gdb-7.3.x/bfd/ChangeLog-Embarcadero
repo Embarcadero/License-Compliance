@@ -1,0 +1,3 @@
+2014-10-13  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* bfdio.c (memory_bstat): Fix size passed to memset call.

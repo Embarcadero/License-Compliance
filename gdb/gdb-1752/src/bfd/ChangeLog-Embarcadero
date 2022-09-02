@@ -1,0 +1,6 @@
+2015-10-07  Kirill Lapshin  <klapshin@embarcadero.com>
+
+	Merge patch from gdb trunk for accepting indirect symbols on read 
+	regardless of they are not supported, i.e. - kind of warnings suppression:
+	2011-12-05  Tristan Gingold  <gingold@adacore.com>
+	* mach-o.c (bfd_mach_o_read_symtab_symbol): Accept indirect symbols.

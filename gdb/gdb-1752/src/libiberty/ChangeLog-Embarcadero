@@ -1,0 +1,40 @@
+2013-10-03  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* makefile.vms (OBJS): Add filename_cmp.obj
+	* filename_cmp.c (filename_ncmp): New function copied from gdb-7.3.
+	* functions.texi: Regenerated.
+
+2013-08-22  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* cp-demangle.c (d_demangle_callback): Don't always pass the
+	DMGL_DELPHI option, as it could break C++ demangling.
+
+2013-08-15  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* cp-demangle.c (d_demangle_callback): Fix Delphi types demangling,
+	code synced with Android case, except DTOR/CTORs/__GLOBAL__ - not 
+	clear if it should done for iOS case right now.
+
+2013-04-08  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* cp-demangle.c (d_demangle_callback): Fix Delphi types demangling,
+	in case type mangled name started with N* and DMGL_TYPES explicitly
+	requested.  
+
+2013-03-10  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* cplus-dem.c, cp-demangle.c: Fix Delphi demangling - changes to
+	produce Pascal component separator output when passed DMGL_DELPHI
+	option flag.  Thus "::" becomes "." if DELPHI_DEMANGLING flag in
+	work->options. 
+
+2013-01-18  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* cplus-dem.c: Fix Delphi demangling - cplus_demangle() now recognizing
+	DELPHI_DEMANGLING flag in work->options. 
+
+2013-01-18  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* cplus-dem.c, cp-demangle.c: Delphi demangler manner.  DMGL_DELPHI
+	demangling added. Additions for demangling delphi/pascal function names,
+	preparations for type names demangling.

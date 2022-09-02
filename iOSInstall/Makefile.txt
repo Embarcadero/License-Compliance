@@ -1,0 +1,20 @@
+# SDK depends on real executor config
+
+XCODE_LOCATION=/Applications/Xcode.app
+MD_FRAMEWORK_LOCATION=/Library/Apple/System/Library/PrivateFrameworks
+ifeq ($(wildcard $(MD_FRAMEWORK_LOCATION)/.),)
+    MD_FRAMEWORK_LOCATION=/System/Library/PrivateFrameworks
+endif
+
+all: iosinstall
+
+iosinstall: MakeDirs iosinstall_lldb.mm
+#	g++ -isysroot $(XCODE_LOCATION)/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -o bin/iosinstall_lldb -framework Cocoa -framework CoreFoundation -framework Carbon -framework MobileDevice -F$(XCODE_LOCATION)/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/PrivateFrameworks iosinstall_lldb.mm
+	g++ -isysroot $(XCODE_LOCATION)/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -o bin/iosinstall_lldb -framework Cocoa -framework CoreFoundation -framework Carbon -framework MobileDevice -F$(XCODE_LOCATION)/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/PrivateFrameworks -F$(MD_FRAMEWORK_LOCATION) iosinstall_lldb.mm
+
+
+MakeDirs :
+	-mkdir -p bin
+
+clean:
+	rm -rf bin *.o

@@ -1,0 +1,1937 @@
+2017-07-19  Oleh Veretennikov <oleh.veretennikov@embarcadero.com>
+	
+	* infcall.c (call_function_by_hand): in case of nested calls of
+	"call_function_by_hand" we should cleanup FCW in order to make local "fcw" 
+	and global "current_fcw" pointed to the same struct.
+
+2017-07-06  Mykola Humeniak <mykola.humeniak@embarcadero.com>
+
+	* symtab.c (symbol_find_demangled_name): changed priority
+	of setting language to symbols when CU is C++ based  
+
+2017-06-22  Oleh Veretennikov <oleh.veretennikov@embarcadero.com>
+
+	* arm-tdep.c (arm_pass_value_as_reference): 
+	Let's use GNU ABI pass_by_reference definition (see gnu-v3-abi.c)  
+
+2017-06-21  Oleh Veretennikov <oleh.veretennikov@embarcadero.com>
+
+	* amd64-tdep.c (amd64_pass_value_as_reference): Fix small regression in
+	case when argument type is TYPE_DELPHI_RETURN.
+
+2017-06-20  Oleh Veretennikov <oleh.veretennikov@embarcadero.com>
+
+	* amd64-tdep.c (amd64_pass_value_as_reference): 
+	Let's use GNU ABI pass_by_reference definition (see gnu-v3-abi.c)  
+
+2017-06-08  Oleh Veretennikov <oleh.veretennikov@embarcadero.com>
+
+	* parse.c: add new operator support OP_PASCAL_UNDETERMINED_ARGLIST  
+	* std-operator.def: add new operator support OP_PASCAL_UNDETERMINED_ARGLIST  
+	* eval.c (evaluate_subexp_standard): add support of Pascal style
+	addressing for multi-dimensional arrays. 
+	* p-exp.y: add Bison rule for expression like expr[expr, arglist, ...]
+
+2017-05-29  Oleh Veretennikov <oleh.veretennikov@embarcadero.com>
+
+	* gdbtypes.h (c_delphi_string_type): add function declaration.
+	* gdbtypes.c (c_delphi_string_type): add function definition. Used for
+	checkig whether current type is one of Delphi ones:
+	System::UnicodeString, System::AnsiString, System::RawByteString.
+	* c-lang.h (c_string_lower_bound): add function definition.
+	* c-lang-c (c_string_lower_bound): add function definitio. Used to
+	define starting index for Linux, which for Delphi types came to C++
+	should be 1.
+	* eval.c (evaluate_subexp_standard): for index operation "[]" process
+	Delphi string came to C++ as array.
+	* valarith.c (value_subscript): use coercion string to array for Delphi
+	strings in C++.
+	* valops.c (value_coerce_string): make coercion from string to array
+	and set start index to 1, in order this is Delphi string in C++. Update
+	character type, if size of character is 2.
+
+2017-05-25  Oleh Veretennikov <oleh.veretennikov@embarcadero.com>
+
+	* amd64-tdep.c (amd64_calling_convention_supported): add __pascal
+	calling convention to allowed ones.
+
+2017-05-23  Oleh Veretennikov <oleh.veretennikov@embarcadero.com>
+
+	* eval.c (evaluate_subexp_standard): since we can't get address of
+	inlined "operator []" for System::UnicodeString type, we should process
+	it as a regular array.
+
+2017-05-22  Oleh Veretennikov <oleh.veretennikov@embarcadero.com>
+	
+	* amd64-tdep.c (amd64_push_actual_fw_args): Add comment explaining 
+	why we are using SP+ offset in order to save function arguments, which
+	were classified to "MEMORY" target class.
+
+2017-05-18  Oleh Veretennikov <oleh.veretennikov@embarcadero.com>
+
+	* amd64-tdep.c (amd64_push_actual_fw_args): Fix stack offset for elements
+	with length 16 bytes (long double).
+
+2017-05-17  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* c-exp.y: Add support for MS built-in integer types (__int32, etc).
+
+2017-05-10  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* c-exp.y: Add enumerators for different kinds of integer literal
+	suffixes.
+	* (parse_number): Add support for MS integer literal suffixes (ui8,
+	i16, etc.).
+
+2017-04-25  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* inflow.c (new_tty): Disable call to ioctl.
+
+2017-04-25  Oleh Veretennikov <oleh.veretennikov@embarcadero.com>
+
+	* inflow.c (new_tty): Return control type of terminal to the slave side of
+	PTY (Xterm).
+
+2017-04-24  Oleh Veretennikov <oleh.veretennikov@embarcadero.com>
+
+	* inflow.c (new_tty): Change TTY type to non-control one. This fix should
+	be used with "setcat cap_sys_admin+ep linuxgdb" command.
+
+2017-04-18  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* linespec.c (decode_all_digits): Revert part of commit which assumed a
+	single symtab per source file.  When code from another Delphi unit is
+	inlined, multiple symtabs are created for the file, and all must be
+	searched for a possible match.  Reverted code #ifdefed out using
+	macro USE_NEW_LINESPEC_r22189.
+
+2017-03-30  Oleh Veretennikov <oleh.veretennikov@embarcadero.com>
+
+	* p-valprint.c (pascal_val_print): change condition for array of element
+	wide char, when we force ellipses.
+
+2017-03-24  Mykola Humeniak  <mykola.humeniak@embarcadero.com>
+
+	* p-valprint.c (pascal_val_print): Correct representation of not
+	initialized delphi dynamic array
+
+2017-03-22  Mykola Humeniak  <mykola.humeniak@embarcadero.com>
+
+	* varobj.c (adjust_value_for_child_access): Don't adjust values for
+	struct/union children if the pointer is actually a Delphi dynamic array.
+
+2017-03-22  Serhii Shapalovskyi  <serhii.shapalovskyi@embarcadero.com>
+
+	* valprint.c (print_floating): precision change when evaluate foating
+	point types.
+
+2017-03-21  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Always maintain fcallwrapper_addr in the current fcw struct for
+	external sources that check for it.
+	* infcall.c (call_function_by_hand): Call using_current_fcw() instead
+	of testing fcallwrapper_addr.  Pass fcallwrapper_addr to
+	push_current_fcw.
+	* (fcw_scan_fcallwrapper): Remove fcallwrapper_addr parameter (now set in
+	fcw struct by push_current_fcw).  Set the current fcw's fcallwrapper_addr
+	to 0 in case of error.
+	* (push_current_fcw): Add fcallwrapper_addr parameter.
+	* infcall.h (push_current_fcw): Add fcallwrapper_addr parameter.
+
+2017-03-21  Dawn Perchik  <dperchik@embarcadero.com>
+
+	If not using the RTL's fCall wrapper, revert the behavior to gdb's
+	original handling for function call evaluation.
+	* infrun.c (handle_inferior_event): In case of BPSTAT_WHAT_SINGLE_FCALL,
+	don't resume the process unless we're using the RTL's fCall wrapper.
+	* (save_infcall_control_state): Don't save the signals unless we're
+	using the RTL's fCall wrapper.
+	* (restore_infcall_control_state): Don't restore the signals unless
+	we're using the RTL's fCall wrapper.
+
+2017-03-21  Dawn Perchik  <dperchik@embarcadero.com>
+
+	RTL fCall wrapper cleanup.
+	* infcall.c (call_function_by_hand): Pass the address of the RTL's fCall wrapper
+	(fcallwrapper_addr) which was returned from fcw_can_use_fcallwrapper to
+	fcw_scan_fcallwrapper.  Check if fcallwrapper_addr is set instead of calling
+	using_current_fcw and before performing fCall wrapper only tasks.
+	Remove redundant warnings and debug output.
+	* (fcw_scan_fcallwrapper): Add fcallwrapper_addr as input parameter and remove
+	call to fcw_can_use_fcallwrapper.
+
+2017-03-16  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* infcall.c (call_function_by_hand): If we're using the RTL's fCall
+	wrapper and allocated memory for storing any struct return arguments,
+	store the pointer away in the fcw struct's args_to_delete field to be
+	freed when we cleanup the fcw, instead of adding it to the inferior's
+	cleanup chain (which gets called before the fcw's args get pushed).
+	* (pop_current_fcw): If set, free args_to_delete.
+	* infcall.h (struct fcallwrapper_info): new: args_to_delete field.
+
+2017-03-10  Oleh Veretennikov <oleh.veretennikov@embarcadero.com>
+
+	* p-valprint.c (pascal_object_print_value_fields): add offset of parent
+	container type for printing members of nested struct/union types, as was
+	done in cp-valprint.c (cp_print_value_fields).
+
+2017-03-08  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* p-typeprint.c (pascal_type_print_base): Don't call the C++ demangler unless
+	the type's name begins with a '_'.
+
+2017-03-07  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* infcall.c (fcw_can_call_function): new: check to see if the RTL will
+	allow function calls.  For Pascal, this means checking for the symbol
+	dbkFCallWrapperAddr.
+	* (call_function_by_hand): call fcw_can_call_function instead of
+	fcw_can_use_fcallwrapper to initially check if function calls are allowed.
+	Then call fcw_can_use_fcallwrapper later to see if the RTL's function call
+	wrapper should be used.
+	* (fcw_can_use_fcallwrapper): remove the check for the symbol dbkFCallWrapperAddr.
+
+2017-03-07  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* infcall.c (call_function_by_hand): if the language is not Delphi, revert to
+	using the original code from gdb for handling struct returns when evaluating
+	function calls.
+
+2017-03-07  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* infcall.c (fcw_can_use_fcallwrapper): new: factor out the code which
+	checks to see if we can use the Delphi RTL's function call wrapper from
+	fcw_scan_fcallwrapper.  Return 1 if the wrapper can be used.
+	* (fcw_scan_fcallwrapper): call fcw_can_use_fcallwrapper.
+	* (call_function_by_hand): call fcw_can_use_fcallwrapper.
+
+2017-03-07  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* infcall.c (fcw_scan_fcallwrapper): Don't use the Delphi RTL's fCall
+	wrapper unless _dbk_RTL_initialized is set to 1, meaning that the RTL has
+	been initialized and is ready to handle exceptions.
+
+2017-03-01  Oleh Veretennikov <oleh.veretennikov@embarcadero.com>
+
+	* p-lang.c (pascal_string_lower_bound): apply for Linux and not Android
+	* valops.c (value_coerce_string value_cstring value_string):
+	  set string_lower_bound to 1 for Linux and not Android
+	* value.c (allocate_repeat_value value_from_longest): set
+	  string_lower_bound to 1 for Linux platform
+
+2017-03-01  Oleh Veretennikov  <oleh.veretennikov@embarcadero.com>
+
+	* c-lang.c (c_get_string): be sure we do not read more than print_max + 1 
+	* c-valprint.c (c_val_print): use force_ellipsis for LA_PRINT_STRING and
+	limit printed length
+	* p-lang.c (pascal_get_string): 
+	be sure we do not read more than print_max + 1, also set stringlength to 
+	print_max + 1 in order to avoid regression with '...' in the end
+	* p-valprint.c (pascal_val_print): use print_max + 1 in order to avoid
+	regresson with '...' in the end
+	* valops.c (value_coerce_string): use print_max + 1 in order to avoid
+	regresson with '...' in the end
+	* valprint.c (read_string): use print_max + 1 everywhere we need to limit
+	string
+
+2017-03-01  Serhii Shapalovskyi  <serhii.shapalovskyi@embarcadero.com>
+
+	* configure.host: Add x86_64-*-* check for floatformat.
+
+2017-02-24  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* infcall.c (cleanup_fcallwrapper_info): New function to delete the
+	fCall stack info.
+	* (pop_current_fcw): If at the top of the fCall info stack, zero the
+	breakpoints so we won't try to delete them again.
+	* (call_function_by_hand): Fix compiler warning and initialize funcaddr
+	used in error string.
+	* inferior.h: Add prototype for cleanup_fcallwrapper_info.
+	* target.c (generic_mourn_inferior): Call cleanup_fcallwrapper_info to
+	delete and remove the fCall breakpoints from the bp_stats lists before
+	they're found and deleted again in generic_mourn_inferior.
+	* symtab.c (alloc_section_addr_info): Check for 0 num_sections before
+	subtracting 1 when allocating (found by valgrind).
+
+2017-02-24  Oleh Veretennikov  <oleh.veretennikov@embarcadero.com>
+
+	* p-valprint.c (pascal_val_print): in case when allocation size for dynamic
+	array is more than opts->print_max ("set print elements"), set allocation 
+	size to opts->print_max * eltlen
+	* varobj.c (c_number_of_children): limit children size to option 
+	"print_max".  
+	* valops.c (value_coerce_string): limit range upperbound to "print_max" in
+	case it's greater than.
+	* p-lang.c (pascal_get_string): set fetchlimit to print_max in case
+	stringlength is greater than "print_max" option
+
+2017-02-23  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* top.c (print_gdb_version): Update copyright date to 2017.
+
+2017-02-17  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* dwarf2read.c (read_tag_Delphi_dynamic_array_type): New function
+	which creates a new pointer for the target_type (instead of lookup up
+	an existing one) so that we don't end up marking a normal pointer that
+	is already in use by another symbol as a dynamic array.
+	* (read_type_die_1): Change to call new function, and make sure dynarray
+	flags are set properly.
+
+2017-02-16  Serhii Shapalovskyi  <serhii.shapalovskyi@embarcadero.com>
+
+	* symtab.c (lookup_symtab): Expand symtab to read all symbols from file.
+
+2017-02-14  Serhii Shapalovskyi  <serhii.shapalovskyi@embarcadero.com>
+
+	* amd64-tdep.c (amd64_classify): Delphi string classification changed to 
+	integer class because it is a pointer.
+
+2017-02-10  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* charset.c (validate): Fix "set host-charset UTF-8" to work on Ubuntu,
+	by setting LC_CTYPE to en_US.UTF-8 ("UTF-8" alone fails).
+
+2017-02-10  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* arm-tdep.c (arm_calling_convention_supported): return 1 for
+	DW_CC_BORLAND_fastcall.
+
+2017-02-09  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Cleanup and fix compiler warnings.
+	* c-valprint.c (c_val_print): Fix address used in error print.
+	* eval.c (evaluate_subexp_standard): put parenthesis around operation to
+	make compiler happy.
+	* p-valprint.c (pascal_val_print): Fix address used in error output, and
+	cleanup.
+	* valops.c (search_struct_property): Make name a const pointer.
+	* value.c: include math.h for prototype of pow.
+
+2017-02-09  Oleh Veretennikov  <oleh.veretennikov@embarcadero.com>
+
+	* c-valprint.c (c_val_print): Fix Delphi string character type length.
+	* p-lang.c (pascal_get_string): Fix Delphi string character type length.
+	* valops.c (value_coerce_string): Fix Delphi string character type length.
+
+2017-02-06  Serhii Shapalovskyi  <serhii.shapalovskyi@embarcadero.com>
+
+	* amd64-tdep.c (amd64_push_actual_fw_args): Fix stack calculation
+	for the arguments that are passed through the stack.
+
+2017-02-02  Oleh Veretennikov  <oleh.veretennikov@embarcadero.com>
+
+	* valops.c 
+	(value_coerce_string, value_cstring, value_string): 
+	In case of the language is Pascal we should setup lowerbound to 1. 
+	* value.c
+	(allocate_repeat_value, value_from_longest):
+	In case of the language is Pascal we should setup lowerbound to 1.
+	* p-lang.c (pascal_string_lower_bound): return 1 in case of Linux ABI.
+
+2017-02-02  Oleh Veretennikov  <oleh.veretennikov@embarcadero.com>
+
+	* p-valprint.c (pascal_val_print): In case stringcharwidth less than 2
+	set it to actual size, so we able to print RawByteString type correctly.
+
+2017-02-02  Serhii Shapalovskyi  <serhii.shapalovskyi@embarcadero.com>
+
+	* p-lang.c (pascal_create_string_type): Fix Delphi string type length.
+
+>>>>>>> .r28387
+2017-01-31  Oleh Veretennikov  <oleh.veretennikov@embarcadero.com>
+
+	* amd64-tdep.c (amd64_calling_convention_supported): Check whether we
+	have defined(non-zero) calling convention, if not, assume we have nothing 
+	to check and return 1.
+
+2017-01-30  Serhii Shapalovskyi  <serhii.shapalovskyi@embarcadero.com>
+
+	* eval.c (binop_promote): Fix Delphi integral type length for 64-bit
+	platforms.
+
+2015-06-14  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* infcall.c (hand_function_call): Add support for Delphi class instances 
+	(TBar*) as function result via struct return scheme.
+	* p-lang.c (pascal_pass_by_reference): Add Delphi class instance support 
+	for struct_return result.
+	* arm-tdep.c (arm_return_value): Delphi class instance result described 
+	as pointer to struct target type and may be recognized by target type 
+	flag "delphiclass". Result passed via struct return scheme in this case.
+	* amd64-tdep.c (amd64_return_value): Delphi class instance result described 
+	as pointer to struct target type and may be recognized by target type 
+	flag "delphiclass". Result passed via struct return scheme in this case.
+
+2016-03-09  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* varobj.c (c_number_of_children): Return 0 if we can't get a valid value
+	for a dynamic array.
+
+2016-03-03  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* varobj.c (c_number_of_children): If we have a dynamic array, lookup
+	up the count and return it.
+	(c_describe_child, should_display_contents, c_value_of_variable):
+	Treat dynamic arrays like static arrays.
+
+2016-02-29  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* dwarf2read.c (read_type_die): Flag the pointer with
+	TYPE_DELPHI_DYNARRAY if it is a Delphi dynamic array.
+	* gdbtypes.h: Add flag_delphi_dynarray, TYPE_DELPHI_DYNARRAY.
+	* p-typeprint.c (pascal_type_print_varspec_prefix): Print the type for
+	a dynamic array as "array of subtype".
+	* p-valprint.c (pascal_val_print): If a pointer is a Delphi dynamic
+	array, read its length and print it as an array.
+
+2016-02-17  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Fix evaluation of Delphi Currency type - now described as 64-bit integer 
+	value with scale. Earlier was 32-bit integer.
+	* p-valprint.c (pascal_val_print): If type has decimal scale in type 
+	specific that means we have to print 64-bit Currency type, so fetch it 
+	as 64-bit integer, then cast to double and print.
+
+2016-02-09  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Fix ARM32 ABI conformance for *ExcNotify RTL's passed Handler address
+	must be read from stack as 5th parameter and cdecl CC used.
+	* breakpoint.c (print_it_typical): Change handler address parameter
+	read. Remove path for RTL syms used for getting *ExcNotify parameters
+	with block syms due to *ExcNotify export sym used only and breakpoint
+	set before *ExcNotify() prologue always, at first instruction.
+
+2016-01-20  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Fix evaluation of class/record fields and array members with String type.
+	* p-valprint.c (pascal_object_print_value_fields): Pass valaddr as NULL 
+	to address if field type is TYPE_CODE_STRING.
+	(pascal_val_print): Use valaddr pointer instead of address parameter for
+	String type if valaddr is not NULL - this means it is debugger address
+	space pointer to target pointer to String data.
+	* valprint.c (val_print_array_elements): Take into account field offset
+	during element address calculation.
+
+2016-01-14  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* top.c: Update copyright date to 2016.
+
+2016-01-05  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* varobj.c (should_display_contents): Expand the contents when
+	displaying the Delphi return type Currency.
+
+2015-11-25  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* dwarf2read.c (read_type_die): Treat Delphi sets and dynarrays as pointers as
+	temporary workarounds for crashes.
+
+2015-11-12  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	AMD64 arch - support for Delphi ABI and the passing of structure values
+	by reference via DWARF extension DW_AT_BORLAND_Delphi_ABI or/and 
+	recognized type flag TYPE_FLAG_DELPHI_ABI or type name.
+	* amd64-tdep.c :
+	(amd64_pass_value_as_reference): New gdbarch callback
+	function for amd64 arch, almost same code as was added for arm arch.
+	(amd64_init_abi): Use amd64_pass_value_as_reference callback.
+	(amd64_push_actual_fw_args): struct_addr parameter means pointer to reserved 
+	memory area used for result extraction. On amd64 arch ABI struct_addr must
+	be passed to called function in RDI general purpose register.
+	(amd64_fcw_argument_push): Pass struct_addr parameter taken from FCW context
+	to FCW pusher.
+	* amd64-tdep.h : Size of general purpose register definition - 
+	INT_REGISTER_SIZE is eight bytes on amd64 arch.
+
+2015-11-09  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Check if Delphi RTL not initialized yet at current breakpoint and abort
+	fCall setup in this case - RTL is not able to process exceptions yet and,
+	thus, fCall wrappering will not work.
+	* infcall.c (call_function_by_hand): Search for the fCall wrapper address 
+	symbol "dbkFCallWrapperAddr", then check dereferenced value as int* - 
+	if NULL - abort fCall, Delphi RTL not initialized at current breakpoint.
+	Embarcadero Delphi RTL specific only.
+
+2015-11-09  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	If available, use entry point address reported by BFD for setting
+	breakpoint for CLI "start" and MI "-exec-run --start" commands. Main
+	function name used as fallback last choice only.
+	* infcmd.c: (run_command_1): Get entry point address, check and form
+	expression for setting breakpoint at absolute address.
+
+2015-11-05  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Delphi vendor specific fCall exception wrapper - support for
+	using fCall wrapper for functions with arguments on amd64 target.
+	* amd64-tdep.c: (amd64_push_actual_fw_args, amd64_fcw_argument_push):
+	New functions. Argument pusher for fCall wrapper.
+	(amd64_init_abi): Enable argument FCW pusher for amd64 arch.
+	TODO: struct return support.
+
+2015-10-30  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* infcall.c (call_function_by_hand): Enable path for function calls using 
+	main executable module entry point address as fCall retaddr. Android is 
+	still particular case - use resolved _NativeMain() in this case because 
+	usual entry point manner does not work in case main app module is solib 
+	by itself - Android native code apps loaded as solibs only.
+
+2015-10-19  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Add Embarcadero support for handling of unsupported calling conventions
+	for amd64 arch.
+	* amd64-tdep.c (amd64_calling_convention_supported,
+	amd64_calling_convention_string): New arch calling convention callbacks.
+	(amd64_init_abi): Set calling convention callbacks for amd64 arch.
+
+2015-09-14  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Merge git commit a7f9ca9cb797d653dc7919538e1dfa0c26010331
+	from gdb trunk fix struct siginfo vs. siginfo_t:
+	2012-03-21 Thomas Schwinge <thomas@codesourcery.com>
+	* amd64-linux-nat.c (amd64_linux_siginfo_fixup): Use siginfo_t instead
+	of struct siginfo.
+	* arm-linux-nat.c (arm_linux_stopped_data_address): Likewise.
+	* ia64-linux-nat.c (ia64_linux_stopped_data_address): Likewise.
+	* linux-nat.c (linux_nat_siginfo_fixup, siginfo_fixup)
+	(linux_xfer_siginfo, linux_nat_set_siginfo_fixup)
+	(linux_nat_get_siginfo): Likewise.
+	* linux-nat.h (struct lwp_info, linux_nat_set_siginfo_fixup)
+	(linux_nat_get_siginfo): Likewise.
+	* linux-tdep.c (linux_get_siginfo_type): Likewise.
+	* ppc-linux-nat.c (ppc_linux_stopped_data_address): Likewise.
+	* procfs.c (gdb_siginfo_t): Likewise.
+
+2015-06-29  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* p-valprint.c (pascal_val_print): Fix evaluation result for empty or 
+	uninitialized Delphi strings. Show result as '' (empty string) instead
+	of error message <Error reading address ...>.
+
+2015-06-15  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* dwarf2read.c (set_cu_language): Add support for DW_LANG_BORLAND_Delphi
+	and treat Delphi language as Pascal.
+
+2015-02-26  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* arm-tdep.c (arm_return_value): Delphi record result use struct returns 
+	for struct type with length bigger than arch reg size, otherwise - register
+	calling convention.
+
+2014-12-05  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* value.c (value_from_longest): Temporary fix against
+	GDB crash on badly formed string info (bad length).
+
+2014-10-13  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* dwarf2read.c (process_die, read_type_die): Add support for
+	DW_TAG_BORLAND_Delphi_string; handle same as DW_TAG_string_type.
+
+2014-10-13  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* ../include/elf/dwarf2.h (DW_AT_BORLAND_closure,
+	DW_TAG_BORLAND_Delphi_string, DW_TAG_BORLAND_Delphi_dynamic_array,
+	DW_TAG_BORLAND_Delphi_set, DW_TAG_BORLAND_Delphi_variant):
+	New DWARF extensions for Delphi types.
+	* dwarf2read.c (dwarf_tag_name, dwarf_attr_name):
+	Strings for new DWARF extensions.
+
+2014-10-13  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* value.c (coerce_array): Call value_coerce_array after converting a
+	string to an array.
+
+2014-08-15  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* c-exp.y ('.' and '->' rules): Keep track of current_method so we can
+	update the current_type if a method is called.  Don't error in
+	lookup_struct_elt_type() when called just to update the current_type.
+
+2014-08-15  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* p-exp.y (pascal_lex): Don't try to lookup the string as a symtab if
+	we already have a type we are completing, otherwise, if we have a file
+	named "typeinfo", we will think "TypeInfo" in "v.TypeInfo.Kind" refers
+	to a symtab instead of a field.
+
+2014-08-06  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+	
+	* p-valprint.c (pascal_object_print_value_fields): Fix problem with
+	pascal string fields in record printed as {...}, i.e. - string fields
+	now printed unconditionally.
+
+2014-08-05  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* infcall.c (call_function_by_hand): Fix for pass by ref pattern 
+	recognition failure due to function target type used for formal
+	parameter type check instead of main function type. Use original 
+	function type for param_type and prototype check - ftype may be 
+	function result target type at formal parameters check point already,
+	i.e not equal original function type.
+
+2014-08-04  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* varobj.c (should_display_contents): Return 1 if it's an array
+	and print option expand_aggregates is set.
+
+2014-06-27  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* charset.c (validate): If "wchar_t" is used as the intermediate
+	encoding and the host charset is "UTF-8", set the locale for LC_CTYPE
+	to "UTF-8" so iconv will work correctly.
+
+2014-06-23  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge Delphi UTF support from iosgdb trunk.
+	* c-lang.c (c_classify_type): Make external.  Check width of type.
+	Treat Delphi char as char16_t.
+	(append_string_as_wide): Make external.
+	* c-lang.h (append_string_as_wide): Add prototypes.
+	* p-lang.c: Include gdb_obstack.h.
+	(pascal_one_char): Add type parameter.  Rewrite as Pascal version
+	of c-lang's c_emit_wchar().
+	(pascal_printstr): Rewrite as Pascal version of c-lang's c_printstr().
+	(pascal_print_wchar): New: Pascal version of c-lang's print_wchar().
+	(pascal_emit_char, pascal_printchar): Pass type to pascal_one_char(),
+	and don't add ending ' (pascal_one_char() now does that for us).
+	* charset.h (get_nbytes_in_wchar): Add prototype.
+	* charset.c (get_nbytes_in_wchar): New: If a UTF LE encoding is used,
+	return the number of bytes belonging to the next Unicode character,
+	else return 0.
+	* utils.c (fputstr_unfiltered): Print all bytes of a UTF-8
+	Unicode character.
+
+2014-06-20  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* main.c (captured_main): Fix non-Android build by adding 
+	#ifdef USE_WIN32API around use of OPT_STOPPIPE.
+
+2014-06-19  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* top.c (print_gdb_version): Add copyright info for statically linked
+	GNU iconv to gdb banner as required by GPLv3.
+
+2014-06-17  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Embarcadero specific StopPipe manner as control channel used by IDE
+	for getting Android target stopped. Changes for command line option
+	usage instead of environment variable.
+	GDB opening named pipe if "--pipestop" option was specified, then
+	starting additional service thread in GDB for receiving stop requests
+	via created pipe. Thread is active only if target is running.
+	* main.c (captured_main): stoppipe_enable flag set and option.
+	(print_gdb_help): Add help message for new "--pipestop"
+	GDB command line option.
+	* remote.c (_initialize_remote): StopPipe created only if
+	stopsocket_enable flag set - i.e. only if "--pipestop" option was
+	specified.
+
+2014-06-11  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* varobj.c (c_value_of_variable): Disable code to strip empty wrappers
+	off delphireturn structs with 1 field, as  this causes us to lose
+	critical information, such as the name of the original type.
+
+2014-06-09  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* varobj.c (should_display_contents): Always display the
+	contents of C strings when using MI commands.
+
+2014-05-15  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* arm-tdep.c (arm_return_value): Fix struct_return pattern recognizing
+	failure in fCall due to Delphi_fastcall calling convention has top priority 
+	for using register result under explicit delphi record type flag set for
+	result by compiler in arm_vfp_abi_for_function. 
+	Actually, Delphi record flag has top priority to enable struct return.
+
+2014-05-14  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* p-valprint.c (pascal_object_print_value_fields): Don't print the
+	name of the field unless options->field_name_print is set.
+	* ada-valprint.c (print_field_values): Don't print the name of the
+	field unless options->field_name_print is set.
+	* jv-valprint.c (java_print_value_fields): Don't print the name of the
+	field unless options->field_name_print is set.
+
+2014-05-13  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* valprint.h (struct value_print_options): Add print options
+	field_name_print and expand_aggregates.
+	* valprint.c (user_print_options): Initialize options field_name_print
+	to 1 and expand_aggregates to 0.
+	(_initialize_valprint): Add support for setting/showing options
+	field_name_print and expand_aggregates.
+	(show_field_name_print): New function: Show value of option
+	field_name_print.
+	(show_expand_aggregates): New function: Show value of option 
+	expand_aggregates.
+	* varobj.c (should_display_contents): Return 1 if it's an aggregate
+	and print option expand_aggregates is set.
+	Remove obsolete check for env var "DISPLAY_STRUCT_CONTENTS".
+	(c_value_of_variable): If we're expanding aggregates, then look
+	inside references by setting opts.deref_ref = 1;
+	* cp-valprint.c (cp_print_value_fields): Don't print the name of the
+	field unless options->field_name_print is set.
+
+2014-05-13  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* varobj.c (should_display_contents): Change param to take the var type
+	to avoid extra overhead.
+	(c_value_of_variable): Pass vartype to should_display_contents().
+
+2014-05-07  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* p-exp.y (ident:): Allow BLOCKNAME to be considered an ident in
+	case we have a method with the same name as a global function.
+
+2014-05-01  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Support for evaluating locals when Delphi nested functions are used.
+	* ../include/dwarf2.h (DW_AT_BORLAND_Delphi_frameptr): New DWARF
+	attribute.
+	* dwarf2read.c (dwarf2_add_member_fn): Set is_frameptr flag if
+	param is TYPE_FIELD_FRAMEPTR or if DW_AT_BORLAND_Delphi_frameptr
+	attribute is present.
+	(read_subroutine_type): Set TYPE_FIELD_FRAMEPTR if
+	DW_AT_BORLAND_Delphi_frameptr attribute is present.
+	(dwarf_attr_name): Return string for DW_AT_BORLAND_Delphi_frameptr.
+	* eval.c (evaluate_subexp_standard): Add comment about calling Delphi
+	nested functions.
+	* gdbtypes.h (struct main_type): Add new flag frameptr. 
+	(struct type): Add new flag is_frameptr. 
+	(TYPE_FIELD_FRAMEPTR, FIELD_FRAMEPTR): New macros for flag frameptr.
+	* p-exp.y (variable: name_not_typename): Handle fields which are
+	implicit members of __FRAME__ and __FRAMEPTR__.
+	* symtab.c (lookup_symbol_aux): Check to see if the variable is a
+	member of an implicit Delphi frameptr or frame structure and set
+	is_a_field_of_this accordingly.
+	* symtab.h (implicit_field_kinds): Add enums for the different kinds
+	of implicit variables a field can be, as represented in
+	is_a_field_of_this.
+	* valops.c (value_of_implicit_frameptr_param,
+	value_of_implicit_frame_struct): New functions for looking up the
+	implicit frame variable when nested functions are present.
+	* value.h (value_of_implicit_frameptr_param,
+	value_of_implicit_frame_struct): Add prototypes.
+
+2014-04-30  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* dwarf2read.c: Include p-lang.h.
+	(read_tag_string_type): Call pascal_create_string_type() to
+	create string type if the current language is pascal.
+	* gdbtypes.c (builtin_type_wchar, builtin_type_Delphi_char):
+	Remove unused prototypes.
+	* p-lang.c (pascal_create_string_type): Make global.
+	* p-lang.h (pascal_create_string_type): Add prototype.
+				
+2014-04-21  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Fix rest of Delphi and C++ cases related to struct_return in fCall
+	- by reference and by value in case result type is struct.
+	* arm-tdep.c (arm_return_value): Fix struct_return pattern failure
+	in Delphi case when result has struct type and result returned by 
+	value. Pattern used if type is struct and Delphi struct type flag set.
+	* gnu-v3-abi.c (gnuv3_pass_by_reference): Fix struct_return pattern 
+	failure in C++ case when result has struct type and result returned 
+	as reference. Pattern improved with type length compare with
+	maximum type may be returned in general purpose register.
+
+2014-04-10  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* infcall.c (call_function_by_hand): Fix problem with arguments
+	count versus function type fields count may throw false error about
+	passed arguments count is less than argument count on function
+	formal argument list - case when function target type used in check 
+	instead of main function type - happened when function has CODE_PTR 
+	or CODE_METHOD type.
+
+2014-04-10  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Embarcadero specific RTL fCall Wrapper - case with Delphi embedded
+	String type returned by C++ function.
+	* infcall.c (find_function_addr): Resolve TYPE_CODE_TYPEDEF to
+	target type.
+	* arm-tdep.c (arm_return_value): Add case if type has code STRUCT
+	and name "System::UnicodeString" for struct result return.
+	* varobj.c (value_get_print_value): Add case if type has code 
+	STRUCT and name "System::UnicodeString" - print as string with 
+	lang val_print.
+
+2014-04-08  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* dwarf2read.c (dwarf2_start_subfile): Workaround against
+	broken directories table entries in DWARF removed - issue
+	now should be fixed on BCC compiler side.
+	* valops.c (value_allocate_space_in_inferior): TODO: Target
+	memory allocations in debuggee disabled for Delphi Android apps
+	due to RTL should provide exports. Just malloc usage causing
+	problems with unstable app behaviour or debugger crashes on
+	evaluating expressions which can summon target app heap ops.
+
+2014-04-07  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* arm-tdep.c (arm_vfp_abi_for_function): Return 1 if the
+	calling convention is Borland __fastcall and target is Android.
+	(_initialize_arm_tdep): Don't set the default FP model to
+	ARM_FLOAT_VFP.
+
+2014-04-04  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* dwarf2read.c (dwarf2_start_subfile): Workaround against
+	broken directories table entries in DWARF. Fix for GDB crash
+	on -symbol-list-lines and break-insert set commands.
+
+2014-04-03  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* buildsym.c (start_subfile): If subfile_name has no path, compare
+	with the file's base name.  Note: disabled until its need is
+	confirmed.
+
+2014-04-01  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* linespec.c (decode_all_digits): Print an error and return if
+	LINETABLE returns a NULL table (don't attempt to dereference).
+
+2014-04-01  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Embarcadero RTL/fCallWrapper specific - pass all signals except
+	debugger SIGINT and SIGTRAP raised in fCall to user app. Fix for
+	issue when debugger got random signal and stopped fCall processing
+	in the middle.
+	* infrun.c (infcall_control_state): Save areas for saving originally
+	set signal flags - fcw_signal_*_savearea.
+	(save_infcall_control_state): Push signal flags.
+	(restore_infcall_control_state): Pop saved signal flags back on
+	inferior state cleanup after fCall.
+
+2014-03-14  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* c-valprint.c (c_val_print): Strip off the empty struct wrapper (if
+	any) when displaying delphireturn types.
+	* varobj.c (c_value_of_variable): Ditto.
+	Move tests for whether varobj contents should be evaluated into 
+	should_display_contents() and call.
+	(should_display_contents): New function.  Return 1 if we should
+	display the contents of the varobj.
+
+2014-03-14  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* arm-tdep.c (arm_calling_convention_supported,
+	arm_calling_convention_string): If the calling convention wasn't
+	specified, assme it's DW_CC_normal.
+
+2014-03-10  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* arm-tdep.c (arm_calling_convention_supported): Replace 
+	DW_CC_GNU_borland_fastcall_i386 with
+	C_BORLAND_fastcall, which is what Dcc is now emitting.
+
+2014-03-10  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Embarcadero support for handling of unsupported calling conventions.
+	* arch-utils.c (default_calling_convention_supported,
+	default_calling_convention_string): New funcs.
+	* arch-utils.h: Add prototypes.    
+	* gdbarch.c (gdbarch_calling_convention_supported, 
+	set_gdbarch_calling_convention_string,
+	gdbarch_calling_convention_supported, 
+	set_gdbarch_calling_convention_string): New gdbarch interfaces.
+	* gdbarch.h: Add prototypes.
+	* dwarf2read.c (dwarf2_add_member_fn): Preserve the calling
+	convention in the method.
+	* arm-tdep.c (arm_calling_convention_supported,
+	arm_calling_convention_string): New functions for gdbarch interface.
+	(arm_calling_convention_supported): Treat
+	DW_CC_GNU_borland_fastcall_i386 as DW_CC_normal as a workaround for
+	Dcc emitting DW_CC_GNU_borland_fastcall_i386 for all functions.
+	* infcall.c (hand_function_call): If the calling convention is not
+	supported on the architecture according to
+	gdbarch_calling_convention_supported(), report an error.
+
+2014-03-05  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* dwarf2read.c: Add comment explaining the reason behind the
+	WORKAROUND_FOR_ISSTMT_STEPINTO_BUG define.
+
+2014-03-05  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* ../include/dwarf2.h (DW_AT_BORLAND_Delphi_return): New DWARF
+	attribute.
+	(DW_CC_BORLAND_fastcall): New DWARF calling convention.
+	* gdbtypes.h (TYPE_FLAG_DELPHI_RETURN): New flag.
+	(main_type): Add flag_delphi_return flag.
+	* gdbtypes.c (init_type): Preserve TYPE_FLAG_DELPHI_RETURN flag.
+	* dwarf2read.c (read_structure_type): If struct has
+	attr DW_AT_BORLAND_Delphi_return, set TYPE_FLAG_DELPHI_RETURN.
+	* c-typeprint.c (c_type_print_base): If TYPE_FLAG_DELPHI_RETURN
+	flag is set, print "__declspec(delphireturn)".
+
+2014-03-04  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Struct return for Delphi String type in fCall enabled.
+	* infcall.c (call_function_by_hand): Fix GDB crash in case if
+	pointer_type for function result type was not resolved, using
+	reference_type instead or throw error.
+
+2014-03-04  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Struct return for Delphi String type in fCall enabled.
+	* infcall.c (call_function_by_hand): Check against if type may be
+	returned with struct_return now is on gdbarch and language only.
+	* p-lang.c (pascal_pass_by_reference): TYPE_CODE_STRING type now valid
+	type for struct_return result.
+	* varobj.c (value_get_print_value): Support for TYPE_CODE_STRING
+	returned by fCall as lazy value, fetch added.
+
+2014-02-27  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Fix GDB crashes during fCall processing when function returns result
+	via passed hidden result pointer argument and result type is not
+	supported by fCall GDB facility yet.
+	* infcall.c (call_function_by_hand): Check against if RESPTR must be
+	passed changed - we should ask current gdbarch in first, then language.
+	Resolve function target type in case of it is method (TYPE_CODE_METHOD).
+	(find_fcw_breakpoint): Fix against FCW breakpoint may be deleted twice.
+	* p-lang.c (pascal_pass_by_reference): TYPE_CODE_STRING type temporarily
+	not supported as valid function result type until struct_return support
+	development will be finally completed.
+
+2014-02-25  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* top.c: Update copyright date to 2014.
+
+2014-02-21  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Fix passing constants in fCall when function expect references in C++.
+	* infcall.c (call_function_by_hand): Allocate constant arguments on
+	debuggee stack and pass pointers instead of values in case reference
+	expected by function.
+
+2014-02-12  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* infcall.c (set_fcw_breakpoint): Fix merge error.
+	(fcw_scan_fcallwrapper): Fix regression since time 
+	when fcw_scan_fcallwrapper was introduced.
+	(call_function_by_hand): Obsolete code branch (STOP_EXCEPTION_HOOK) 
+	removed. Extra line feeds removed in error message for case RTL caught
+	exception during fCall execution.
+
+2014-02-07  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* p-lang.c (pascal_pass_by_reference): Return 1 for unions and strings.
+	* arm-tdep.c (arm_type_align): Return 4 as the alignment of strings.
+
+2014-02-07  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* p-lang.c (pascal_pass_by_reference): New function for
+	default_pass_by_reference replacement for Delphi.
+	* infcall.c (call_function_by_hand): Unconditional error
+	reporting in case of function argument should passed by
+	reference changed to asking language_pass_by_reference() in first. 
+	* arm-tdep.c (arm_push_actual_fw_args): Check against if argument
+	must be passed as reference removed - all arguments types already
+	checked at moment of arm_push_actual_fw_args called.
+
+2014-02-06  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* infcall.c (call_function_by_hand): Cleanup.
+
+2014-02-06  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* arm-tdep.c (arm_return_value): Fix Delphi string to return
+	RETURN_VALUE_STRUCT_CONVENTION.
+
+2014-02-06  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* varobj.c (varobj_update): Always re-evaluate array value on 
+	update like new for current scope. No method for members values 
+	changed detection if array ptr or/and its type was not changed.
+	Case may happen if scope (frame) not changed during stepping.
+
+2014-01-31  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* infcall.c (call_function_by_hand): Error if called function returns
+	struct by value to workaround lack of support in function call
+	wrapper.  Cleanup error message for caught exception.  Add FIXMEs.
+	* arm-tdep.c (arm_pass_value_as_reference): Use INT_REGISTER_SIZE for
+	register size.
+	(arm_return_value): Return RETURN_VALUE_ABI_RETURNS_ADDRESS for return
+	type of string type.  Add FIXMEs.
+
+2014-01-27  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 23269 from ios/gdbcrossarm/gdb-1752:
+	Add cleanup code for FCW state.  Handle possible nested function call
+	by using a stack for the current FCW context.
+	* infcall.h (struct fcallwrapper_info): Add next field for stack
+	push/pop.  Add FCW BPs ReadyToPushPoint_bpt, CatchPoint_bpt,
+	ResultFetchPoint_bpt.
+	(using_current_fcw, push_current_fcw, pop_current_fcw,
+	fcw_breakpoint_hit): Add prototypes.
+	* infcall.c (init_fcallwrapper_info): Change to take fcallwrapper_info
+	struct pointer.  Use memset to init.
+	(using_current_fcw): New function.  Return 1 if the current function
+	call wrapper is being used.
+	(push_current_fcw): New function.  Push the current fCall wrapper info.
+	(pop_current_fcw): New function.  Pop the current fCall wrapper info
+	and reset any changed state.
+	(pop_current_fcw_cleanup): New function.  Version of pop_current_fcw
+	that can be called by cleanup code.
+	(find_fcw_breakpoint):  New function.  Find which FCW is responsible
+	for setting this FCW BP and clear the BP.  Return 1 on success.
+	(fcw_breakpoint_hit): New function.  Test if the BP is one of our FCW
+	control BPs with BP_NAME.
+	If so, delete the BP and return 1, else return 0.
+	(fcw_scan_fcallwrapper): Change params to localize setting of FCW
+	fields.  Return modified real_pc.  Add code to set FCW control BPs and
+	FCW fields fcallwrapper_addr and user_real_pc.
+	(call_function_by_hand): Move code into fcw_scan_fcallwrapper() which
+	handles FCW setup.  Call push_current_fcw to start a new FCW context.  
+	Register cleanup code for FCW to call pop_current_fcw and restore the
+	state.  Remove old cleanup code for FCW state.
+	* breakpoint.c (bpstat_what): Replace tests for FCW control BPs with
+	calls to fcw_breakpoint_hit(), and don't delete.
+
+2014-01-27  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 23268 from ios/gdbcrossarm/gdb-1752:
+	* arm-tdep.c (arm_pass_value_as_reference): Fix condition for testing
+	if param should be passed as a reference.
+
+2014-01-27  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 23259 from ios/gdbcrossarm/gdb-1752:
+	* infcall.c (call_function_by_hand): Test using_fcw instead of
+	fcw->fcallwrapper_addr to mean we're using the fCall wrapper.
+	Move initialization of fcw->fCallCatchTriggered below
+	fcw->fcallwrapper_addr.
+
+2014-01-27  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 23257 from ios/gdbcrossarm/gdb-1752:
+	* infcall.c (fcw_scan_fcallwrapper): New function.  Extract code from 
+	call_function_by_hand() which looks up and scans the fCall wrapper
+	function symbol "__dbk_fcall_wrapper". 
+	(set_fcw_breakpoint): New function.  Extract code from 
+	call_function_by_hand() which sets the temporary FCW breakpoints.
+	(call_function_by_hand): Replace code with calls to
+	fcw_scan_fcallwrapper() and set_fcw_breakpoint().  Cleanup comments.
+
+2014-01-27  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 23245 from ios/gdbcrossarm/gdb-1752:
+	Use access functions to access FCW globals.
+	* infcall.h (fcallwrapper_info): New structure for holding FCW gobals.
+	Replaces FCW gobals.
+	(get_current_fcw, set_fcw_exception_raised, fcw_exception_raised):
+	Add prototypes.
+	* infcall.c (current_fcw): Singleton copy of fcallwrapper_info
+	structure for current function call wrapper.
+	(init_fcallwrapper_info): Initialize current_fcw.
+	(get_current_fcw): New function: Return current_fcw.
+	(set_fcw_exception_raised): New function: Set
+	current_fcw->fCallCatchTriggered.
+	(fcw_exception_raised): New function: Return
+	current_fcw->fCallCatchTriggered.
+	(call_function_by_hand): Use get_current_fcw() to access FCW globals
+	via structure.  Fix compiler warnings.
+	* arm-tdep.c (arm_fcw_argument_push): Use get_current_fcw() to access
+	FCW globals via structure.  Fix compiler warnings.
+	* breakpoint.c (bpstat_what): Use set_fcw_exception_raised()/
+	fcw_exception_raised() to access global
+	current_fcw->fCallCatchTriggered. 
+
+2014-01-27  Dawn Perchik  <dperchik@embarcadero.com>
+	Merge rev 23244 from ios/gdbcrossarm/gdb-1752:
+	* arm-tdep.c (arm_pass_value_as_reference): Fix condition for testing
+	if param should be passed as a reference.
+
+2014-01-27  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 23237 from ios/gdbcrossarm/gdb-1752:
+	* infcall.c (call_function_by_hand): Document how the fCall wrapper
+	works.  Report error if required fCall BP points could not be found
+	while scanning __dbk_fcall_wrapper.  Add FIXMEs for cleanup work
+	that should be implemented.
+
+2014-01-27  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 23230 from ios/gdbcrossarm/gdb-1752:
+	* infcall.c (call_function_by_hand): If calling a function via
+	the function call wrapper, abort the function call if
+	it involves a struct return to avoid crashing in user code.
+	Add comments about how the function call wrapper works.
+
+2014-01-24  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 23228 from ios/gdbcrossarm/gdb-1752:
+	Initial support for Delphi ABI and the passing of structure values
+	by reference via DWARF extension DW_AT_BORLAND_Delphi_ABI.  Currently
+	all such function calls are aborted.
+	* ../include/dwarf2.h (DW_AT_BORLAND_Delphi_ABI): New DWARF attribute.
+	* dwarf2read.c (read_subroutine_type): Set TYPE_FLAG_DELPHI_ABI
+	flag for attribute DW_AT_BORLAND_Delphi_ABI.
+	Until compiler support added, assume all functions defined in Delphi
+	adhere to the Delphi ABI.
+	(dwarf_attr_name): Add DW_AT_BORLAND_Delphi_ABI.
+	(dwarf2_add_member_fn): Preserve TYPE_FLAG_DELPHI_ABI flag.
+	* arm-tdep.c (arm_pass_value_as_reference): New function.
+	Return 1 if the function argument is passed by value but should
+	instead be passed by reference (as in the case of passing a structure
+	by-value to a function which follows the Delphi ABI).
+	(arm_push_actual_fw_args): Abort the function call if
+	arm_pass_value_as_reference() returns 1 for any argument.
+	(arm_push_dummy_call): Add comments about not being able to test 
+	arm_pass_value_as_reference() when using function wraller.
+	(arm_gdbarch_init): call set_gdbarch_pass_value_as_reference() to
+	set arm_pass_value_as_reference.
+	* gdbtypes.h (TYPE_FLAG_DELPHI_ABI, TYPE_DELPHI_ABI): New macros.
+	(TYPE_FLAG_NOTTEXT): Fix flag.
+	(struct type): Fix unused bitfield.
+	* gdbtypes.c (recursive_dump_type): Handle TYPE_FLAG_DELPHI_ABI.
+	(check_stub_method): Add FIXMEs.
+	* gdbarch.c (gdbarch_pass_value_as_reference): New function.  Call
+	gdbarch's pass_value_as_reference.  This function should return true
+	if the function passed the specified type is using the convention of
+	passing structures in memory (passing in the address as a reference
+	parameter).  
+	(set_gdbarch_pass_value_as_reference): New function.  Set gdbarch's
+	pass_value_as_reference field.
+	(gdbarch_pass_value_as_reference_p): New function.  Return true if
+	pass_value_as_reference is set.
+	(struct gdbarch): Add new field pass_value_as_reference.
+	(struct gdbarch startup_gdbarch): Initialize pass_value_as_reference
+	field to default_pass_value_as_reference.
+	(gdbarch_alloc): Initialize pass_value_as_reference field to
+	default_pass_value_as_reference.
+	(gdbarch_dump): Dump pass_value_as_reference.
+	* gdbarch.h: Add prototypes.
+	* arch-utils.c (default_pass_value_as_reference): New function.  
+	Default for checking if value should be passed via addr.  Calls 
+	default_stabs_argument_has_addr() (which uses
+	DEPRECATED_REG_STRUCT_HAS_ADDR()).
+	* arch-utils.h (default_pass_value_as_reference): Add prototype.
+	* infcall.c (call_function_by_hand): Abort the function call if
+	using_pass_value_as_reference() returns 1 for any argument.
+	* value.c (using_pass_value_as_reference): New function.  Call 
+	gdbarch_pass_value_as_reference() on the current gdbarch.
+	* value.h (using_pass_value_as_reference): Add prototype.
+
+2014-01-27  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Fix problems with stepping over atomic instructions sequences.
+	* arm-tdep.c (thumb_deal_with_atomic_sequence_raw): 
+	Atomic sequences can have more than one branch instructions.
+
+2014-01-22  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Cleanup: fix indentation and coding style. 
+
+2014-01-22  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Enable CPP exception notifications support in debugger.
+	* breakpoint.c (set_dbgexcnotify): Use export _CPPDbgExcNotify 
+	symbol to set internal bkpt on CPP RTL exception hook.
+	(print_it_typical): Report CPP exception notification with 
+	parameters passed by CPP RTL as *stopped event. 
+
+2014-01-20  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Embarcadero specific fCall exception wrapper. 
+	Fix for floating point arguments not passed by FCW version of 
+	arm_push_dummy_call in case ARM VFP FP model used.
+	* arm-tdep.c (arm_push_actual_fw_args): VFP registers setup added.
+	(_initialize_arm_tdep): Set ARM_FLOAT_VFP FP model by default in
+	case Android target.
+
+2014-01-14  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Embarcadero specific fCall exception wrapper. 
+	Final fix for possible fCall breakages after __dbk_fcall_wrapper 
+	code generation changes.
+	* infcall.c (call_function_by_hand): Code generation indepependent 
+	fCall wrapper function scanner added. Changes in fcall wrapper control 
+	points setting. Fix extra space in fCall Wrapper error message.
+
+2013-12-18  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Embarcadero specific fCall exception wrapper.
+	Make fCall Wrapper code arch independent and unified, 
+	cleanup, GDB project conformance.
+	TODO: get rid of hardcoded offsets in fCall Wrapper.
+	* arch-utils.c (default_fcw_argument_push): New func.
+	* arch-utils.h: Add prototype.    
+	* gdbarch.c (gdbarch_fcw_argument_push, 
+	set_gdbarch_fcw_argument_push): New gdbarch interface.
+	* gdbarch.h: Add prototypes.
+	* arm-tdep.c (arm_push_actual_fw_args): Declared as static now.
+	(arm_fcw_argument_push): New function for gdbarch interface.
+	* infcall.c (fcw_argument_push): Moved to ARM tdeps as gdbarch
+	interface.
+	(call_function_by_hand): Unused code cleanup caused by FCWrapper 
+	algorithm changes.
+	* breakpoint.c (bpstat_what): gdbarch_fcw_argument_push interface
+	usage.
+
+2013-12-12  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Cleanup: fix indentation and coding style. 
+
+2013-11-20  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Fix GDB crashes.
+	* cp-namespace.c (lookup_namespace_scope): Handle Pascal scope 
+	separator.
+	* varobj.h (c_value_of_variable): Fix crash on static aaray of char.
+	Check if print_value not NULL added.
+
+2013-11-14  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* varobj.c (c_value_of_variable): If a struct has the name
+	"System::UnicodeString", go ahead and try to evaluate it.
+
+2013-11-14  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* gdbtypes.c (check_typedef): Report error if pointer has NULL
+	target_type.
+
+2013-11-14  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* eval.c (evaluate_subexp_standard): If function call evaluation is
+	attempted on a non-function, report error to work-around the lack of
+	exception recovery.
+
+2013-11-13  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* c-valprint.c (c_val_print): Add support for printing Delphi strings
+	in C++.
+
+2013-11-12  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* p-exp.y (yylex): Always lookup cp_lookup_symbol_nonlocal
+	even when current_type is set.
+
+2013-11-11  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* arm-tdep.c (arm_push_actual_fw_args): Make static.
+	(arm_gdbarch_init): Call set_gdbarch_push_actual_fw_args to set
+	gdbarch->push_actual_fw_args for the arm target.
+	* arm-tdep.h (arm_push_actual_fw_args): remove prototype.
+	* gdbarch.c (struct gdbarch): Add field push_actual_fw_args.
+	(verify_gdbarch, startup_gdbarch, gdbarch_dump): Handle field
+	push_actual_fw_args.
+	(gdbarch_alloc): Init fields push_actual_fw_args,
+	solib_symbols_extension, has_dos_based_file_system.
+	(gdbarch_push_actual_fw_args_p, gdbarch_push_actual_fw_args,
+	set_gdbarch_push_actual_fw_args): New functions for field
+	push_actual_fw_args.
+	* gdbarch.h (gdbarch_push_actual_fw_args_p, gdbarch_push_actual_fw_args,
+	set_gdbarch_push_actual_fw_args): Add prototypes.
+	* infcall.c (fcw_argument_push): Call gdbarch_push_actual_fw_args()
+	instead of arm_push_actual_fw_args().
+
+2013-11-11  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* dwarf2read.c (process_die): Reenable namepsace import handling;
+	now implemented.
+	(read_import_statement): Use "." for Pascal namespace operator.
+	* p-exp.y (yylex): If unable to lookup symbol, try looking in imported
+	namespaces via cp_lookup_symbol_nonlocal().
+	Use "." for Pascal namespace operator.
+
+2013-11-10  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Delphi vendor specific fCall exception wrapper - support for
+	using fCall wrapper for functions with arguments.
+	* infcall.c: (call_function_by_hand) Delphi RTL fCall wrapper 
+	minsym lookup and usage. (fcw_argument_push) Arch independent 
+	argument push helper function.
+	* infcall.h: (fcw_argument_push) export.
+	* breakpoint.c: (bpstat_what) fcw_argument_push call.
+	* arm-tdep.c: (arm_push_actual_fw_args) Argument push helper for
+	fCall wrapper. New function. TODO: float point arguments support.
+	* arm-tdep.h: (arm_push_actual_fw_args) export.
+
+2013-11-06  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* varobj.c (c_describe_child): Use original syntax for C++.
+	Do Pascal syntax only if language == pascal.
+
+2013-11-05  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* varobj.c (language_specific): Initialize C++ using C functions
+	to disable fake children in C++.
+	(CPLUS_FAKE_CHILD): Always return 0.
+
+2013-11-05  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* dwarf2read.c (process_die): Disable broken namespace support.
+
+2013-11-05  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* p-exp.y: Treat Dalphi units (namespaces) as structs for the
+	purposes of lookup (i.e. don't check for in_parse_field).  If we
+	that saw_structop was set and we have an IDENT, update current_type
+	to the member.
+	(saw_structop): Make global so we can test for it in parsing rules.
+
+2013-11-05  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* p-exp.y: Add additional debugging output.
+	* parse.c: Likewise.
+
+2013-10-31  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Fix problem with exception notification in case RTL debug
+	info not available. 
+	* breakpoint.c (print_it_typical, set_dbgexcnotify): Print 
+	DbgExcNotify parameters without verification with block syms. 
+	If RTL symbols available safe path will be used.
+	_DbgExcNotify minsym usage.
+
+2013-10-28  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* infcall.c: (call_function_by_hand) Delphi specific fCall wrapper
+	usage.
+	* infrun.c: (handle_inferior_event) handle BPSTAT_WHAT_SINGLE_FCALL 
+	fCall wrapper action.
+	* breakpoint.c: (bpstat_what) Servicing fCall wrapper actions.
+	* breakpoint.h: BPSTAT_WHAT_SINGLE_FCALL action added to
+	bpstat_what_main_action enum.
+	Delphi vendor specific fCall exception wrapper. TODO: Argument pusher.
+
+2013-10-23  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* valops.c (check_field): return 1 if name is a property.
+
+2013-10-22  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* p-exp.y: Include TYPENAME in ident token.
+
+2013-10-21  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* varobj.c (varobj_value_is_changeable_p): Return 1 for
+	TYPE_CODE_STRING types.
+	(c_value_of_variable): If value is lazy, attempt to fetch it.  On
+	failure, return "???".  Remove alternate type TYPE_CODE_STRING from 
+	varobj_value_is_changeable_p() assrtion.
+
+2013-10-21  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 22432 from ios/gdbcrossarm/gdb-1752:
+	* value.h (coerce_string, value_coerce_string): add prototypes.
+	* value.c (coerce_array): turn a Delphi string into an array of
+	characters by calling value_coerce_string().
+	(coerce_string): Call value_coerce_string() for string types.
+	(value_primitive_field): Special case strings due to a Dcc
+	bug where string members are coming through with DW_AT_bit_size.  
+	Don't reset the address after calling value_from_longest().  FIXME:
+	this breaks taking the address of string members.
+	(value_from_longest): Handle TYPE_CODE_STRING types as
+	Delphi strings by dereferencing them and turning them into an array
+	of Delphi characters, then set the address to the start of the array.
+	* valops.c (value_coerce_string): Turn the string into an array of
+	chars starting at the dereferenced address.
+	(value_cast_1): Don't allow a Delphi string to be cast to anything
+	other than another string, since a Delphi string is actually a pointer
+	to struct.
+	* valarith.c (value_subscript): Turn a Delphi string into an array of
+	characters before indexing (via value_coerce_string()).
+	* eval.c (evaluate_subexp_standard): allow subscripting of
+	TYPE_CODE_STRING types in case BINOP_SUBSCRIPT.
+	* varobj.c (varobj_value_is_changeable_p): Return 0 for
+	TYPE_CODE_STRING types.
+	(c_value_of_variable): Don't require TYPE_CODE_STRING or
+	TYPE_CODE_ARRAY types to be varobj_value_is_changeable_p().
+
+2013-10-18  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* infcall.c (call_function_by_hand): Getting address of fCall wrapper
+	function from pointer extracted on main module load event.
+	* solib.c (solib_read_symbols): Finding fCall wrapper ptr exported by
+	runtime library.  Resolving RTL fCall wrapper function address.
+	Minor fix for old forgotten tabs.
+
+2013-10-18  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* breakpoint.h (make_cleanup_enable_disable_bpts_during_operation):
+	Export.
+	* breakpoint.c (disable_user_breakpoints_before_operation, 
+	enable_user_breakpoints_before_operation, 
+	make_cleanup_enable_disable_bpts_during_operation): New functions for
+	using in MI varobj dependant ops.  Disable breakpoints during varobj
+	evaluations to let fCall executed without function breakpoints
+	triggered in the middle.
+
+2013-10-17  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* valops.c (find_overload_match): Set memflagp to the result of
+	oload_method_flag instead of oload_method_static so caller can check
+	for Delhi class methods (should have been included in merge rev 22038
+	from ios/gdbcrossarm/gdb-1752).
+
+2013-10-15  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 22431 from ios/gdbcrossarm/gdb-1752:
+	* varobj.c (c_value_of_variable): For TYPE_CODE_ARRAY, always evaluate
+	Delphi strings, and return "{...}" instead of "[n]" for other arrays.
+	* completer.c (skip_quoted_chars): treat '' as a single ' in Delphi.
+	* p-valprint.c (pascal_val_print): For TYPE_CODE_STRING and
+	TYPE_CODE_ARRAY, use is_char_type() to determine if the elements are
+	characters and should be printed as a string, and handle multi-byte
+	characters.  For TYPE_CODE_INT, use is_char_type() to determine if 
+	the integer is a character and should be printed as such, and handle
+	multi-byte characters.  For TYPE_CODE_CHAR, handle multi-byte
+	characters.
+	(is_char_type): new: Return TRUE if the element type is a character
+	and should be printed as such.  Used to test if an array of chars
+	should be  printed with string syntax.  Recognize "N6System8WideCharE"
+	or "wchar_t" elements as characters in Delphi.
+	(unpack_char): Extract the character type from the buffer and mask it
+	to undo any possible sign extensions.  
+	* p-exp.y (yylex): Read characters of STRINGs as uint16_t characters.
+	Treat '' as the empty single literal.
+	Treat '' embeded in a string literal as a single '.
+	(exp : STRING): Handle string literals with wide characters.
+	(exp : exp '[' exp1 ']'): don't special case strings
+	because Dcc doesn't generate the expected field info.
+
+2013-10-08  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* eval.c (evaluate_subexp_standard): Enable overload resolution
+	for Delphi.
+
+2013-10-07  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* breakpoint.h: STOP_EXCEPTION_HOOK kind of "stack dummy" stop added.
+	* breakpoint.c (bpstat_what): Checking if fCall interrupted by 
+	unhandled exception.
+	* infcall.c (call_function_by_hand): Checking STOP_EXCEPTION_HOOK stop
+	flag and drop fCall with initial debuggee state restore.  Handling case
+	with exception raised during fCall was left unhandled by debuggee.
+	TODO: handling case if exception may be handled in try/except block -
+	next step.
+
+2013-10-04  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* c-exp.y: Undo implicit dereference of DelphiObject "ptr" members;
+	ARC is no longer implemented using wrapper (now part of class).
+
+2013-10-03  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Callstack and stepping speed improvement.
+	* target.c (trust_readonly): Make public.
+	(memory_xfer_partial): Use host libraries for xfer ops in first,
+	if possible.
+	* solib.c (solib_read_symbols): Turn trust_readonly switch on
+	after main solib loaded.
+
+2013-09-19  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 22430 from ios/gdbcrossarm/gdb-1752:
+	* p-lang.c (builtin_type_Delphi_char): Delphi builtin char type.
+	(pascal_get_string): Like c_get_string, but handles TYPE_CODE_STRING.
+	If TYPE_CODE_STRING, read string as pointer into System::WideChar
+	structure.
+	(pascal_string_lower_bound): NYI: Use architecture to get lower bound.
+	(pascal_char_type): Build and/or return the static copy of
+	builtin_type_Delphi_char.
+	(pascal_create_string_type): Create a Delphi string type of code
+	TYPE_CODE_STRING.
+	(pascal_primitive_types, pascal_language_arch_info): Add Delphi types
+	and remove non Delphi types.
+	(pascal_language_defn): Specify function pascal_get_string() for
+	reading a string from memory.
+	c-lang.h (c_classify_type): Export.
+	c-lang.c (c_classify_type): Renamed from classify_type.
+	* dwarf2read.c (read_file_scope): Set the current language to match
+	that of the CU and restore it when done.
+	(restore_language): new: restore the saved language during cleanup.
+	* language.c (integral_type): unused: Recognise Delphi enums as
+	integral types.
+	(structured_type): Fix indentation.
+
+2013-09-17  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* varobj.c (varobj_create): Don't create a var object if evaluation
+	fails.
+
+2013-09-07  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* p-lang.c symtab.c solib.c remote.c disasm.c cp-namespace.c:
+	Cleanup. Comments added.
+
+2013-09-04  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* solib-svr4.c (svr4_current_sos): Fix for dynamic linker without syms 
+	issue. Fixes pending breakpoints resolving regression in such cases.
+
+2013-09-02  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* solib.c: Add checking against if raw_stdout stream was not initialized
+	at moment of usage. Patch for printing (gdb) extra prompts after each
+	library-loaded event.
+	* solib-svr4.c (svr4_current_sos): Fix for GDB crash on error libraries 
+	list XML DTG. Updated version from GDB 7.6 backported.
+
+2013-08-29  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* stack.c (find_frame_funname, frame_info): Remove parameters types
+	info from frame entry on backtrace list - it makes callstack more
+	readable.
+	* p-name-parser.y (p_comp_to_string): Fix Delphi component separator -
+	DMGL_DELPHI flag now included in demangler options to
+	cplus_demangle_print.
+
+2013-08-27  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* p-exp.y (yylex): Return STRING for '' and 'xxx'.
+	(exp : exp '[' index ']'): Add comment about dereferencing strings.
+
+2013-08-23  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* eval.c (evaluate_subexp_standard): Disable calls to class methods.
+	Disable overload resolution of Delphi methods due to wrong 'this' type. 
+
+2013-08-23  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* eval.c (evaluate_subexp_standard): Revert checking for overloads
+	in Delphi units due to regression.
+
+2013-08-23  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 22277 from ios/gdbcrossarm/gdb-1752:
+	* eval.c (evaluate_subexp_standard): if calling a non-member function,
+	handle the case that the function is in a namespace and do overload
+	resolution on it.
+
+2013-08-23  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 22276 from ios/gdbcrossarm/gdb-1752:
+	* cp-support.h, cp-support.c: replace calls to cp_demangled_name_to_comp
+	and cp_comp_to_string with wrappers which select the appropriate
+	function from p-name-parser.y or cp-name-parser.y to call based on 
+	the current language.
+	FIXME: a better fix would be to build a common version of cp-support
+	with vectors to select based on language, but that would require a
+	partial rewrite and introduce too much risk.
+	(demangled_name_to_comp, comp_to_string):
+	wrappers which call cp_demangled_name_to_comp or
+	p_demangled_name_to_comp (cp_comp_to_string or p_comp_to_string)
+	depending on whether the current language is C++ or pascal.
+	* p-name-parser.y: copy code from cp-name-parser.y and rework original
+	changes, as the interface has changed from gdb 6.3. 
+
+2013-08-23  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 22274 from ios/gdbcrossarm/gdb-1752:
+	* valops.c (find_oload_champ_namespace_loop): Recognise '.' as the
+	namespace separator if the current language is pascal.
+
+2013-08-23  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 22273 from ios/gdbcrossarm/gdb-1752:
+	* p-name-parser.y, Makefile.in: initial support for parsing Delphi
+	names, as needed for overload resolution.  Support is originally
+	based on C++ with modifications to parse Delphi namespaces (units),
+	and will continue to be modified as per the Delphi grammar.
+
+2013-08-23  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* disasm.c, disasm.h (find_pc_offset): -data-disasssmble helper
+	function.
+
+2013-08-20  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* arm-tdep.h, arm-tdep.c, arm-linux-tdep.c: Backport patch from latest
+	GDB: stepping through atomic instruction sequences support.
+
+2013-08-19  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* infcmd.c, solib.c, breakpoint.c, breakpoint.h, infcall.c:
+	Fix for problem with GDB error during Release app syms read.
+	Fix for case when fCall facility can't get app reliable address
+	for fCall return bkpt.
+	TYPE_DELPHI_CLASS/TYPE_DELPHI_RECORD macros.
+
+2013-08-16  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* c-exp.y: Implicitly dereference DelphiObject "ptr" members to get to
+	the real Delphi class.  I.e. Evaluate "obj->fld" as "obj->ptr->fld".
+
+2013-08-15  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 22186 from ios/gdbcrossarm/gdb-1752:
+	* eval.c (evaluate_subexp_standard): don't call methods if `this'
+	pointer is NULL.
+
+2013-08-15  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 22176 from ios/gdbcrossarm/gdb-1752:
+	* gdbtypes.h (flag_delphi_class, flag_delphi_record): New flags.
+	* dwarf2read.c (read_structure_type): If struct has attr
+	DW_AT_BORLAND_Delphi_class, set flag_delphi_clas.  If struct has
+	attr DW_AT_BORLAND_Delphi_record, set flag_delphi_record.
+	* c-typeprint.c (c_type_print_base): If TYPE_DELPHI_CLASS,
+	print "__declspec(delphiclass)".  If TYPE_DELPHI_RECORD,
+	print "__declspec(delphirecord)".
+
+2013-08-15  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 22175 from ios/gdbcrossarm/gdb-1752:
+	* c-exp.y: Add parsing for Borland properties.
+
+2013-08-15  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 22145 from ios/gdbcrossarm/gdb-1752:
+	* c-typeprint.c (c_type_print_base): Add support for printing
+	properties in structs/classes.  Print "__classmethod" if method is
+	class method. 
+
+2013-08-14  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* symtab.h symtab.c psymtab.c minsyms.c dwarf2read.c dictionary.c:
+	Changes in syms name hashing - fixes Pascal case insensitive
+	evaluation for globals.
+
+2013-08-09  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* breakpoint.c linespec.c: Fix breakpoints in case single line spans
+	multiple addresses - loops (FOR, WHILE) and templates/generics cases.
+
+2013-08-08  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* infrun.c thread.c remote.c: Fix GDB crash on closing remote debug
+	session if inferior exited during stepover end.
+
+2013-08-07  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* cp-valprint.c (cp_print_value_fields),
+	* p-valprint.c (pascal_object_print_value_fields): Skip nested
+	structure types when displaying contents of a struct.
+
+2013-08-05  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* p-exp.y: Improve tracking of current_type.
+	Report error for unreadble property.
+
+2013-08-01  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* solib.c (solib_read_symbols): Workaround against main module in solib.
+	Adjust main module sections like svr4_relocate_main_executable() does
+	in main EXE case.
+
+2013-08-01  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* p-typeprint.c (pascal_type_print_base): Swap order of property name
+	and type in case type is undefined.  Remove redundant check for NULL
+	TYPE_TARGET_TYPE (TYPE_FN_FIELD_TYPE (f, j)).
+
+2013-08-01  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* dwarf2read.c (dwarf2_add_prop_field): Allow parent die type to be
+	DW_TAG_class_type in addiion to DW_TAG_structure_type.
+
+2013-08-01  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* varobj.c (create_child_with_value): Use faked unique 
+	child names if name is empty.
+
+2013-08-01  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* remote.c: Create stop thread in suspended state.
+	Debug session start stability improved.
+
+2013-07-31  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* infcall.c (call_function_by_hand),
+	objfiles.c (entry_point_address_query): Add TODO for linker.
+	We need entry_point for program shared library.
+	* breakpoint.c, breakpoint.h (get_nativemain_entry_point): New:
+	Workaround for missing shared lib entry_point.
+	* p-exp.y, cp-namespace.c: fCall enabled in Pascal expression parser.
+	Basic fCall enabled.
+
+2013-07-30  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* Makefile.in: Include Embarcadero svn revision in version string.
+
+2013-07-30  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* top.c: Add Embarcadero modifications notice, copyright date, and
+	build date to banner.
+	* Makefile.in: Add build_date, and if $(VERSION) is set, use it for the
+	version string when generating version.c. 
+	* version.h: Add global build_date.
+
+2013-07-30  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* p-valprint.c (pascal_val_print): No predictions for pointer may point
+	to string in case of target type is TYPE_CODE_INT.
+
+2013-07-29  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Cleanup: fix indentation and coding style. 
+
+2013-07-29  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* remote.c (_initialize_remote, getpkt_or_notif_sane_1,
+	TargetStopThreadProc): Fix problems with target pausing (Ctrl^C bug). 
+	Additional error checking in stop pipe initialization.
+	* infcmd.c (kill_command): Likewise.
+
+2013-07-26  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* valops.c (value_ind), wrappers.c (gdb_value_ind): 
+	Fix crashes during var-list-children MI command execution -
+	enclosing type may be NULL in some cases.
+
+2013-07-26  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* varobj.h, varobj.c (c_describe_child): Fix crash during
+	var-info-path-expression MI command execution -
+	TYPE_FIELD_NAME can return null string in some cases.
+	Pascal lang added to possible varobj languages set - TODO.
+
+2013-07-26  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* varobj.c (c_describe_child): Fix crash on cname assignment -
+	TYPE_FIELD_NAME can return null string in some cases.
+
+2013-07-25  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 22049 from ios/gdbcrossarm/gdb-1752:
+	* p-exp.y: Modify rule "variable : name_not_typename" condition
+	$1.is_a_field_of_this, to add implicit "self" support for properties
+	and parameterless methods.
+	Add rule "variable : name_not_typename '(' arglist ')'" to add implicit
+	"self" support for methods.
+
+2013-07-25  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 22048 from ios/gdbcrossarm/gdb-1752:
+	* Fix "self" (and implicit "self") member access.
+	Note: implicit "self" not yet working for properties/methods.
+	* valops.c (value_of_this): if (language_pascal), lookup "self".
+	* eval.c (evaluate_subexp_standard): case OP_THIS:
+	if (language_pascal), try to lookup "self" first.
+	* p-exp.y (name_not_typename): add IDENT.
+	(yylex): if we were unable to look up a symbol, try looking up "self".
+	If the field is a member of "self"'s type, set is_a_field_of_this=1.
+
+2013-07-25  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 22047 from ios/gdbcrossarm/gdb-1752:
+	* p-exp.y: Add new token ident.  Add rule to get ident from NAME.
+	Replace IDENT with ident in field access rules, so that NAMEs can
+	be used in class member evaluation by the rule "exp : exp '.' ident".
+	Fixes evaluation of "p self.value".
+
+2013-07-25  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 22045 from ios/gdbcrossarm/gdb-1752:
+	* p-exp.y: Use token IDENT to represent an identifier string.  
+	Remove obsolete token FIELDNAME.  Fixes regression in method calls
+	caused by previous change from name to FIELDNAME.
+	(yylex): if (!sym && current_type), return token IDENT.  Remove
+	obsolete code for case sensitivity.
+
+2013-07-25  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 22038 from ios/gdbcrossarm/gdb-1752:
+	* value.h (METHOD_FLAG_STATIC): new: Flag for static method.
+	(METHOD_FLAG_CLASSMETHOD): new: Flag for Delphi class method.
+	* p-typeprint.c (pascal_type_print_base): Print "class" if method
+	is a class method.
+	* gdbtypes.h (struct feld): Add new bitfield flag metaclass.
+	(struct fn_fieldlist): Add new bitfield flag is_metaclass.
+	* dwarf2read.c (dwarf2_add_member_fn): Set is_metaclass flag if param
+	has DW_AT_BORLAND_Delphi_metaclass attribute.
+	(read_subroutine_type): Set metaclass flag if param has
+	DW_AT_BORLAND_Delphi_metaclass attribute.
+	* eval.c (evaluate_subexp_standard): If method is a Delphi class
+	method, don't call it. 
+	* valops.c (oload_method_flag): new: Return method flag.
+	(search_struct_method, value_struct_elt, value_struct_elt_as_lval,
+	find_overload_match): Change "is_static" param to return either
+	METHOD_FLAG_STATIC or METHOD_FLAG_CLASSMETHOD.
+
+2013-07-25  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 22017 from ios/gdbcrossarm/gdb-1752:
+	* p-exp.y: Restrict field evaluation to FIELDNAME instead
+	of name.  This fixes regression caused by consuming everything to the
+	right of '.' as part of the name.  This broke evaluation of expressions
+	like "x.y - 1".  
+
+2013-07-25  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 21974 from ios/gdbcrossarm/gdb-1752:
+	* gdbtypes.h, gdbtypes.c (lookup_struct_elt_struct,
+	lookup_struct_elt_fn_field, lookup_struct_elt_prop_field,
+	error_unknown_struct_elt): new: functions callable by p-exp.y to
+	support evaluation of methods and properties.
+	* p-exp.y (grammar): added parsing rules for:
+	exp : exp '.' name, exp : exp '.' name '('arglist ')'.
+	Removed obsolete rule: exp : exp '.' FIELDNAME.
+	Changed rule arglist to make it more like c-exp.y.
+	* p-exp.y (yylex): Removed obsolete test for (search_field &&
+	current_type).
+
+2013-07-25  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 21973 from ios/gdbcrossarm/gdb-1752:
+	* dwarf2read.c: Enable language extentions which apply to Delphi.
+
+2013-07-25  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 21972 from ios/gdbcrossarm/gdb-1752:
+	* gdbtypes.c, gdbtypes.h, dwarf2read.c (struct prop_field): Remove
+	unused property read/write fields "fieldptr" and "fnfieldptr".
+
+2013-07-25  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 21965 from ios/gdbcrossarm/gdb-1752:
+	* p-typeprint.c (pascal_type_print_base): Dump properties.
+
+2013-07-25  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 21964 from ios/gdbcrossarm/gdb-1752:
+	* p-lang.h, p-typeprint.c: dump arguments from the function type,
+	not the mangled name.
+
+2013-07-25  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* breakpoint.c (print_it_typical): exception-raised reply printing 
+	with full exception info.
+	* infcmd.c (continue_1): Enable bkpt on DbgExcNotify().
+
+2013-07-24  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* dwarf2read.c: call to dwarf2_lookup_field() disabled due to crash.
+	* symtab.c: call to skip_prologue_sal() disabled - we allow setting BPs
+	on exact PC even if it points to prologue code.
+
+2013-07-23  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 21953 from ios/gdbcrossarm/gdb-1752:
+	* value.h, valops.c, expression.h, gdbtypes.c, gdbtypes.h,
+	dwarf2read.c, eval.c, parse.c: Add support for evaluating
+	Delphi properties.
+
+2013-07-23  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 21952 from ios/gdbcrossarm/gdb-1752:
+	* p-exp.c: Add support for parsing Delphi properties.
+
+2013-07-23  Dawn Perchik  <dperchik@embarcadero.com>
+
+	Merge rev 21951 from ios/gdbcrossarm/gdb-1752:
+	* dwarf2read.c, ../include/dwarf2.h: Add support for Dwarf extensions.
+
+2013-07-22  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* arm-tdep.c (arm_scan_prologue): Fix for debug session stop on
+	read target memory error.  Additional check against prologue
+	range was calculated totally wrong - further memory reads will
+	be stopped, prologue scan considered as failed.
+
+2013-07-19  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* breakpoint.c: Temporary fix for "Cannot access memory" error.
+	Permanent fix will be applied later, after additional
+	investigation.
+
+2013-07-18  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* corefile.c, remote.c: Changes in stop pipe servicing thread
+	logic - now stop thread running all time. Extended target memory
+	access errors logged to MI log.
+
+2013-07-17  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* remote.c: Changes in stop pipe logging - now stop bytes logged
+	only by stop pipe client command.
+
+2013-07-16  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* solib.c, solist.h (struct so_list): new member was_reported added. 
+	(solib_add): library-loaded reported only for new libs reported by inferior.
+	Fix for multiple library-loaded notifications issue in MI output.
+
+2013-07-15  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* solib.c (solib_add): observer_notify_solib_loaded() called only
+	after symbols was read.
+
+2013-07-15  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* symtab.c (find_line_pc): Only exact matches allowed in line-to-pc
+	calculations.
+
+2013-07-05  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* breakpoint.c, breakpoint.h (set_dbgexcnotify): new:
+	DbgExcNotify bkpt installer function added. 
+
+2013-07-04  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* breakpoint.c: New bkpt reason printed - EXEC_ASYNC_EXCEPTION_RAISED
+	if DbgExcNotify() hook triggered.
+
+2013-07-04  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* infcmd.c (continue_1): Control variables for MI command
+	-enable-debughook, default state=disabled.
+
+2013-07-03  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* dwarf2read.c, p-typeprint.c: Fix Delphi demangling for types.
+
+2013-07-02  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* p-typeprint.c, p-valprint.c: Char type evaluation and type demangling
+	fix.
+
+2013-07-02  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* utils.c, psymtab.c, symtab.c, p-lang.c: Case insensitive evaluation
+	enabled for pascal lang.
+
+2013-07-02  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* p-valprint.c, p-lang.c, symtab.c: Add string type evaluation support.
+	"Semi-WideChar" solution - non-ASCII mappable wide chars in string
+	displayed as raw codes. 
+	(symtab.c): Remove some debug prints.
+
+2013-07-01  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* p-valprint.c, value.c, valarith.c, gdbtypes.h, dwarf2read.c: Currency
+	type evaluation.
+
+2013-07-01  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* dwarf2read.c (dwarf_decode_lines): Workaround for stepinto and line
+	bkpt setting to wrong address problems. Ignore is_stmt = 0 set by
+	compiler.
+
+2013-06-28  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* symtab.c symfile.c: Delphi demangling related changes.
+
+2013-06-18  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* disasm.c (dump_insns): dumped insn size (in bytes) field added.
+
+2013-06-18  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* source.c (line_info): Support for -data-info-line MI command - MI
+	analogue of CLI "info line".

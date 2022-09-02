@@ -1,0 +1,86 @@
+2016-01-11  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Inform IDE about main executable text section addr range as faked 
+	library loaded notification on inferior created event.
+	* mi-interp.c (mi_inferior_appeared): Get main exe BFD and scan
+	for .text section, then pack faked library-loaded notification.
+
+2015-11-06  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Partial merge git commit 72bfa06c56ec662b4262cc264f45462ccda6a5d6
+	from public GDB git trunk - doc and test skipped.
+	Document support for -exec-run --start in -list-features.
+	This adds "exec-run-start-option" in the output of the -list-features
+	commands, allowing front-ends to easily determine whether -exec-run
+	supports the --start option.
+	2013-12-03  Joel Brobecker  <brobecker@adacore.com>
+	* mi/mi-main.c (mi_cmd_list_features): add "exec-run-start-option".
+
+2015-11-06  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	Partial merge git commit 5713b9b5c1cb873d65caba98616e3f9d92db11f6
+	from public GDB git trunk - doc and test skipped.
+	Add support for --start option in -exec-run GDB/MI command.
+	2013-10-04  Joel Brobecker  <brobecker@adacore.com>
+	* mi/mi-main.c (run_one_inferior): Add function description.
+	Make ARG a pointer to an integer whose value determines whether
+	we should "run" or "start" the program.
+	(mi_cmd_exec_run): Add handling of the "--start" option.
+	Reject all other command-line options.
+
+2014-04-25  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-cmd-disas.c (mi_cmd_disassemble): Fix disassembler returned 
+	empty instructions list if no sym info found for given start address 
+	- even minsyms not available - in this case disassemble reasonable 
+	amount of bytes enough for looking around.
+
+2013-10-18  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-main.c (mi_cmd_data_evaluate_expression): Disable user breakpoints
+	before start expressions evaluation - fCalls possible. 
+	* mi-cmd-var.c (mi_cmd_var_create, mi_cmd_var_evaluate_expression,
+	mi_cmd_var_update): Disable user breakpoints before start expressions
+	evaluation - fCalls possible.  Disable breakpoints during varobj
+	evaluations to let fCall executed without function breakpoints
+	triggered in the middle.
+
+2013-09-07  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-parser.c: Cleanup. Comments added.
+
+2013-08-23  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-cmd-disas.c (mi_cmd_disassemble): Allow the data-disassemble
+	command to that "-s -n" as a pair.
+
+2013-07-29  Dawn Perchik  <dperchik@embarcadero.com>
+
+	* Cleanup: Fix indentation and coding style. 
+
+2013-07-15  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-interp.c (mi_solib_loaded): Loaded module address range info added
+	to output.
+
+2013-07-12  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-interp.c, mi-main.c, mi-out.c, mi-parse.c, mi-cmds.h: MI File
+	logger added.  To enable MI session log in separate file, use
+	"set MIGDB_DEBUG=1".  Log will be created in current directory (from
+	where Android GDB was called) with pattern: "migdb_<androidgdb PID>.log"
+
+2013-07-04  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-common.c, mi-common.h: Add new bkpt reason
+	EXEC_ASYNC_EXCEPTION_RAISED for DbgExcNotify() hook bkpt event.
+
+2013-07-04  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-cmds.c, mi-cmds.h, mi-main.c: MI command -enable-debughook, default
+	state=disabled. Valid values: yes/no.
+
+2013-06-18  Kirill Lapshin  <Kirill.Lapshin@embarcadero.com>
+
+	* mi-main.c, mi-cmds.c: New -data-info-line MI command - MI analogue of
+	CLI "info line".
