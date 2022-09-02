@@ -1,17 +1,16 @@
 # Open Source License Compliance
 Open source libraries that have been modified and/or used in projects distributed by Embarcadero. The source code is share in compliance with the original licenses.
 
-Name: GDB
-License: GPLv2
-Original location: http://www.opensource.apple.com/source/gdb/gdb-1752/
+* [GDB](https://github.com/Embarcadero/License-Compliance/tree/main/gdb)
+  * License: GPLv2
+  * Source: http://www.opensource.apple.com/source/gdb/gdb-1752/
 
-iOSInstall contains
-Name: Fruitstrap
-License: GPLv3
-Original location: https://github.com/ghughes/fruitstrap
-Name: ios-deploy
-License: GPLv3
-Original location: https://github.com/ios-control/ios-deploy
-
-Name: GNU Patch
-License: GPLv3
+* [iOSInstall](https://github.com/Embarcadero/License-Compliance/tree/main/iOSInstall)
+  * Fruitstrap
+    * License: GPLv3
+    * Source: https://github.com/ghughes/fruitstrap
+  * ios-deploy
+    * License: GPLv3
+    * Source: https://github.com/ios-control/ios-deploy
+* [GNU Patch](https://github.com/Embarcadero/License-Compliance/tree/main/GNU-Patch/)
+  * GPLv3
