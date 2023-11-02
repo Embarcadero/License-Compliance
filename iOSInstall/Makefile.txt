@@ -1,20 +1,25 @@
-# SDK depends on real executor config
-
 XCODE_LOCATION=/Applications/Xcode.app
 MD_FRAMEWORK_LOCATION=/Library/Apple/System/Library/PrivateFrameworks
 ifeq ($(wildcard $(MD_FRAMEWORK_LOCATION)/.),)
     MD_FRAMEWORK_LOCATION=/System/Library/PrivateFrameworks
 endif
 
-all: iosinstall
+all: clean init built nodebug sign
 
-iosinstall: MakeDirs iosinstall_lldb.mm
-#	g++ -isysroot $(XCODE_LOCATION)/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -o bin/iosinstall_lldb -framework Cocoa -framework CoreFoundation -framework Carbon -framework MobileDevice -F$(XCODE_LOCATION)/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/PrivateFrameworks iosinstall_lldb.mm
-	g++ -isysroot $(XCODE_LOCATION)/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -o bin/iosinstall_lldb -framework Cocoa -framework CoreFoundation -framework Carbon -framework MobileDevice -F$(XCODE_LOCATION)/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/PrivateFrameworks -F$(MD_FRAMEWORK_LOCATION) iosinstall_lldb.mm
+built:
+	g++ -DIOS_DEPLOY_FEATURE_DEVELOPER_MODE -DNDEBUG -arch arm64 -arch x86_64 -mmacosx-version-min=10.13 -isysroot $(XCODE_LOCATION)/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -o bin/iosinstall -framework Foundation -framework CoreFoundation -framework MobileDevice -F$(XCODE_LOCATION)/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks -F$(MD_FRAMEWORK_LOCATION) ios-deploy.m
 
+nodebug:
+	strip bin/iosinstall
 
-MakeDirs :
-	-mkdir -p bin
+sign:
+	codesign -f -s - --en ios-deploy.ent bin/iosinstall
+
+init:
+	mkdir -p bin
+	awk '{ print "\""$$0"\\n\""}' lldb.py >> lldb.py.h
 
 clean:
-	rm -rf bin *.o
+	rm -rf bin
+	rm -rf lldb.py.h
+	rm -rf *.o
