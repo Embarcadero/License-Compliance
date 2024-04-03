@@ -1,5 +1,5 @@
 # Open Source License Compliance
-Open source libraries that have been modified and/or used in projects distributed by Embarcadero. The source code is share in compliance with the original licenses.
+Open source libraries that have been modified and/or used in projects distributed by Embarcadero. The source code is shared in compliance with the original licenses.
 
 * [GDB](https://github.com/Embarcadero/License-Compliance/tree/main/gdb)
   * License: GPLv2
