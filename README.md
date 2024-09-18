@@ -15,4 +15,7 @@ Open source libraries that have been modified and/or used in projects distribute
 * [GNU Patch](https://github.com/Embarcadero/License-Compliance/tree/main/GNU-Patch/)
   * GPLv3
 
+* [LD64](https://github.com/Embarcadero/License-Compliance/tree/main/LD64/)
+  * APPLE PUBLIC SOURCE LICENSE
+
 <sub>*These libraries are not supported by Embarcadero.*</sub>
