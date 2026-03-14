@@ -18,4 +18,8 @@ Open source libraries that have been modified and/or used in projects distribute
 * [LD64](https://github.com/Embarcadero/License-Compliance/tree/main/LD64/)
   * APPLE PUBLIC SOURCE LICENSE
 
+* [IDEDelphiAST](https://github.com/Embarcadero/License-Compliance/tree/main/IDEDelphiAST/)
+  * License: MPL 2.0
+  * Based on: https://github.com/RomanYankovsky/DelphiAST with modifications including renaming
+  
 <sub>*These libraries are not supported by Embarcadero.*</sub>
